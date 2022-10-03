@@ -12,6 +12,54 @@
       [21, 22, 23, 24, 25],
     ];
 
+    
+   
+    const letterPath = [
+      "Letters/Blue/",
+      "Letters/Box/",
+      "Letters/Brown/",
+      "Letters/Marble/",
+      "Letters/Metal/",
+      "Letters/Solid/",
+      "Letters/Wood/",
+      "Letters/Yellow/",
+    ];
+ 
+    const letters = [
+      "letter_A.png",
+      "letter_B.png",
+      "letter_C.png",
+      "letter_D.png",
+      "letter_E.png",
+      "letter_F.png",
+      "letter_G.png",
+      "letter_H.png",
+      "letter_I.png",
+      "letter_J.png",
+      "letter_K.png",
+      "letter_L.png",
+      "letter_M.png",
+      "letter_N.png",
+      "letter_O.png",
+      "letter_P.png",
+      "letter_Q.png",
+      "letter_R.png",
+      "letter_S.png",
+      "letter_T.png",
+      "letter_U.png",
+      "letter_V.png",
+      "letter_W.png",
+      "letter_X.png",
+      "letter_Y.png",
+      "letter_Z.png",
+    ];
+
+    const animalPath = [
+      "Animals/Round/",
+      "Animals/Round-o/",
+      "Animals/Square/",
+      "Animals/Square-o/",
+    ];
     const animals = [
       "bear.png",
       "buffalo.png",
@@ -21,29 +69,29 @@
       "crocodile.png",
       "dog.png",
       "duck.png",
-       "elephant.png",
-       "frog.png",
-       "giraffe.png",
-       "goat.png",
-       "gorilla.png",
-       "hippo.png",
-       "horse.png",
-       "monkey.png",
-       "moose.png",
-       "narwhal.png",
-       "owl.png",
-       "panda.png",
-       "parrot.png",
-       "penguin.png",
-       "pig.png",
-       "rabbit.png",
-       "rhino.png",
-       "sloth.png",
-       "snake.png",
-       "walrus.png",
-       "whale.png",
-       "zebra.png"
-    ]
+      "elephant.png",
+      "frog.png",
+      "giraffe.png",
+      "goat.png",
+      "gorilla.png",
+      "hippo.png",
+      "horse.png",
+      "monkey.png",
+      "moose.png",
+      "narwhal.png",
+      "owl.png",
+      "panda.png",
+      "parrot.png",
+      "penguin.png",
+      "pig.png",
+      "rabbit.png",
+      "rhino.png",
+      "sloth.png",
+      "snake.png",
+      "walrus.png",
+      "whale.png",
+      "zebra.png",
+    ];
 
     let level1 = [
       {1 : [1, 2, 3, 4, 5]},
@@ -54,24 +102,30 @@
     ];
 
 
-    let newtab = randomValue(animals);
     let generatedTab = [];
-
-    for (let i = 0; i < 5; i++) {
-      generatedTab.push([i,newtab()]);
-     
-    }
-    
-    console.log(generatedTab);
-
-    let tabFromNewTab = randomValue(generatedTab);
     let mixedGeneratedTab = [];
-    for (let i = 0; i < 5; i++) {
-      mixedGeneratedTab.push(tabFromNewTab());
-    }
-    console.log(mixedGeneratedTab);
-    
-    const promise = new Promise((resolve, reject) => {
+
+    function startGame(tabItems, path){
+        // let newtab = randomValue(tabItems);
+        for (let i = 0; i < 5; i++) {
+            generatedTab.push([i, generateItemPath(tabItems, path)]);
+            for (let j = 1; j < generatedTab.length; j++) {
+              console.log(generatedTab[i, j])
+              if(generatedTab[i, j] !== generatedTab[i, j]){
+                generatedTab.push([i, generateItemPath(tabItems, path)])
+              }
+              
+            }
+            
+        }
+
+        
+        console.log(generatedTab);
+        let tabFromNewTab = randomValue(generatedTab);
+        for (let i = 0; i < 5; i++) {
+          mixedGeneratedTab.push(tabFromNewTab());
+        }
+        console.log(mixedGeneratedTab);
      
     displayCard(generatedTab[0]);
       setTimeout(() => {
@@ -95,16 +149,11 @@
         
       }, 10000);
       
-    });   
-    
-    
-    
+  
+    }
     let idCard = [];
-
-    
-    
-    
     let button;
+
     function check(button) {
         let card1 = document.getElementById("0");
         let card2 = document.getElementById("1");
@@ -114,9 +163,7 @@
         let cards = document.getElementsByClassName("card");
         
         
-        
-        // console.log(card1)
-      
+
                if(button == card1.id){
               let test1 = new Promise((resolve, reject) => {
                 if (button == generatedTab[0][0] && idCard.length == 0) {
@@ -147,7 +194,11 @@
                         selectCard = cards[i]
                     }
                 }
-                selectCard.classList.add('nope')
+                selectCard.classList.add('nope');
+
+                setTimeout(()=>{
+                    selectCard.classList.remove('nope')
+                }, 500)
                 
                 
                 
@@ -241,20 +292,40 @@
                 });
             }
             congrat(idCard, generatedTab);
-           
+
+           if(idCard.length == generatedTab.length){
+            restartGame(idCard, animals, animalPath);
+           }
+
+    }
+    
+
+    startGame(animals, animalPath);
+    function restart(){
+        
+    }
+    
+    function restartGame(reset, tab, path){
+
+        BOARD.insertAdjacentHTML('beforeend', "<button id='restart'>Restart</button>");
+        BOARD.insertAdjacentHTML("beforeend", "<button id='next'>Alphabet</button>");
+
+        let restart = document.getElementById('restart');
+        let next = document.getElementById("next");
+        
+        generateGame(restart, tab, path);
+        generateGame(next, letters, letterPath);
+        reset.length = 0;
+        generatedTab.length = 0;
+        mixedGeneratedTab.length = 0;
 
     }
 
-    // function compare(button, tab, i++){
-    //     if(button == tab){
-    //         idCard.push(button);
-    //     }else{
-    //         console.log('error')
-    //     }
-    // }
-
-    
-  
+    function generateGame(el, game, gamepath){
+      el.addEventListener('click', function(){
+        startGame(game, gamepath)
+      })
+    }
 
     function congrat(tab1, tab2){
         
@@ -266,18 +337,12 @@
         
         }
     }
-    function checkIt(button, num, tab){
-
-            if(button == tab && tab.length == num){
-                tab.push(button)
-            }else(
-                console.log('error')
-            ) }
+    
 
     function displayCard(pic) {
       let displayHtml = "";
       displayHtml +=
-        "<img src='pic/Animals/" + pic[1] + "' >";
+        "<img src='pic/" + pic[1] + "' >";
       BOARD.innerHTML = displayHtml;
     }
 
@@ -289,12 +354,23 @@
               pics[i][0] +
               " onClick='check(" +
               pics[i][0] +
-              ")'><img src='pic/Animals/" +
+              ")'><img src='pic/" +
               pics[i][1] +
               "' ></button>";
             BOARD.innerHTML = displayMixedTab;
             
         }
+    }
+
+    function generateItemPath(item, file) {
+      let text = "";
+      let folder = "";
+      let element = "";
+      element = randomValue(item);
+      folder = randomValue(file);
+      text = "" + folder() + element() + "";
+      return text;
+     
     }
    
     function cardSelected(f){
@@ -311,11 +387,10 @@
           copy = tab.slice(0);
         }
         let index = Math.floor(Math.random() * copy.length);
-        let animal = copy[index];
+        let element = copy[index];
         copy.splice(index, 1);
-        return animal;
+        return element;
       };
     }
     
 
-// }
