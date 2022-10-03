@@ -13,6 +13,8 @@
     ];
 
     
+
+    
    
     const letterPath = [
       "Letters/Blue/",
@@ -101,10 +103,43 @@
       {5 : [21, 22, 23, 24, 25]},
     ];
 
+    
 
     let generatedTab = [];
     let mixedGeneratedTab = [];
+    mainMenu();
+    function mainMenu(){
+      let game = "";
+      let practiceButton ="";
+      game = "<button id='game' disabled>Jeu</button>";
+      practiceButton ="<button id='practice'>Entrainement</button>";
+      BOARD.innerHTML = practiceButton + game;
 
+      gamebutton = document.getElementById("game");
+      practiceMode = document.getElementById("practice");
+      
+      practiceMode.addEventListener("click", function () {
+        // startGame(animals, animalPath);
+        chrono(5);
+      });
+      
+      
+      
+      
+
+    }
+
+    function chrono(time){
+      let timer = "";
+      for (let i = time; i >= time; i--) {
+
+        setTimeout(()=>{
+          timer = i;
+          BOARD.innerHTML = timer
+        }, i * 1000)
+        
+      }
+    }
     function startGame(tabItems, path){
         // let newtab = randomValue(tabItems);
         for (let i = 0; i < 5; i++) {
@@ -300,7 +335,7 @@
     }
     
 
-    startGame(animals, animalPath);
+    
     function restart(){
         
     }
@@ -342,7 +377,7 @@
     function displayCard(pic) {
       let displayHtml = "";
       displayHtml +=
-        "<img src='pic/" + pic[1] + "' >";
+        "<img class='scrollPic' src='pic/" + pic[1] + "' >";
       BOARD.innerHTML = displayHtml;
     }
 
@@ -354,7 +389,7 @@
               pics[i][0] +
               " onClick='check(" +
               pics[i][0] +
-              ")'><img src='pic/" +
+              ")'><img class='scrollPic' src='pic/" +
               pics[i][1] +
               "' ></button>";
             BOARD.innerHTML = displayMixedTab;

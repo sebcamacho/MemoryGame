@@ -1,7 +1,26 @@
 .great{
-        background-color: aquamarine !important;
-    }
+    background-color: aquamarine !important;
+}
 
-    .nope{
-        background-color: darkred;
-    }
+.nope{
+    background-color: darkred;
+}
+
+body{
+    height: 100vh;
+}
+.card{
+    width: 50%;
+    height: 180px;
+}
+#board{
+    height: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+}
+.scrollPic{
+    width: 80%;
+    max-width: 250px;
+}
