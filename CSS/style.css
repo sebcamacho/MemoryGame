@@ -11,7 +11,8 @@ body{
 }
 .card{
     width: 50%;
-    height: 180px;
+    max-width: 260px;
+    height: 260px;
 }
 #board{
     height: 100%;
@@ -23,4 +24,6 @@ body{
 .scrollPic{
     width: 80%;
     max-width: 250px;
+
+    height: auto;
 }

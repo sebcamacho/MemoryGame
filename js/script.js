@@ -104,9 +104,12 @@
     ];
 
     
-
+    
+    let cards = document.querySelectorAll(".card");
+ 
     let generatedTab = [];
     let mixedGeneratedTab = [];
+
     mainMenu();
     function mainMenu(){
       let game = "";
@@ -119,42 +122,31 @@
       practiceMode = document.getElementById("practice");
       
       practiceMode.addEventListener("click", function () {
-        // startGame(animals, animalPath);
-        chrono(5);
+        startGame(animals, animalPath, 10);
+       
       });
       
-      
-      
-      
 
     }
+    
+    
+    
 
-    function chrono(time){
-      let timer = "";
-      for (let i = time; i >= time; i--) {
-
-        setTimeout(()=>{
-          timer = i;
-          BOARD.innerHTML = timer
-        }, i * 1000)
-        
-      }
-    }
+    
     function startGame(tabItems, path){
-        // let newtab = randomValue(tabItems);
+      generatedTab.length = 0;
+      mixedGeneratedTab.length = 0;
+    
+      
         for (let i = 0; i < 5; i++) {
             generatedTab.push([i, generateItemPath(tabItems, path)]);
-            for (let j = 1; j < generatedTab.length; j++) {
-              console.log(generatedTab[i, j])
-              if(generatedTab[i, j] !== generatedTab[i, j]){
+
+              if(generatedTab[i][1] !== generatedTab[i][1]){
                 generatedTab.push([i, generateItemPath(tabItems, path)])
               }
-              
-            }
             
         }
 
-        
         console.log(generatedTab);
         let tabFromNewTab = randomValue(generatedTab);
         for (let i = 0; i < 5; i++) {
@@ -162,184 +154,102 @@
         }
         console.log(mixedGeneratedTab);
      
-    displayCard(generatedTab[0]);
+    /**
+     * Display cards one by one before choice
+     */
+    for (let i = 0; i < generatedTab.length; i++) {
       setTimeout(() => {
-        displayCard(generatedTab[1]);
-      }, 2000);
-
-      setTimeout(() => {
-        displayCard(generatedTab[2]);
-      }, 4000);
-
-      setTimeout(() => {
-        displayCard(generatedTab[3]);
-      }, 6000);
-
-      setTimeout(() => {
-        displayCard(generatedTab[4]);
-      }, 8000);
-
+        displayCard(generatedTab[i]);
+      }, i * 2000);
+      
+    }
+    /**
+     * Display all Cards and add events on buttons
+     */
       setTimeout(() => {
         displayCards(mixedGeneratedTab);
-        
+        displayChrono.innerHTML = 10;
+        cards = document.querySelectorAll('.card');
+        cards.forEach((card) => {
+          card.addEventListener("click", onButtonClick);
+        });
       }, 10000);
-      
-  
     }
     let idCard = [];
-    let button;
 
-    function check(button) {
-        let card1 = document.getElementById("0");
-        let card2 = document.getElementById("1");
-        let card3 = document.getElementById("2");
-        let card4 = document.getElementById("3");
-        let card5 = document.getElementById("4");
-        let cards = document.getElementsByClassName("card");
-        
-        
 
-               if(button == card1.id){
-              let test1 = new Promise((resolve, reject) => {
-                if (button == generatedTab[0][0] && idCard.length == 0) {
-                  idCard.push(button);
-                  resolve(idCard);
-                  return console.log("nice");
-                } 
-                    
-                  reject('false');
-                
-              });
-              test1
-                .then((result) => {
-                  console.log(result);
-                  card1.disabled = true;
-                  card1.classList.add("great");
-                  console.log(test1);
-                })
-                .catch((e) => {
-                    console.log(e);
-                    
-                  
-                });
-            }else{
-                let selectCard;
-                for (let i = 0; i < 5; i++) {
-                    if (button == cards[i].id) {
-                        selectCard = cards[i]
-                    }
-                }
-                selectCard.classList.add('nope');
+let displayChrono = document.getElementById("chrono");
+/**
+ * 
+ * @param {PointerEvent} button 
+ */
+function onButtonClick(button) {
 
-                setTimeout(()=>{
-                    selectCard.classList.remove('nope')
-                }, 500)
-                
-                
-                
-            }
+  console.log(button.button)
+  
+let idButton = button.currentTarget.id;
+let buttonClicked = button.currentTarget
+ 
+  if(displayChrono.textContent == 10){
+    countDown(10);
+  }
 
-              if(button == card2.id){
-                  let test2 = new Promise((resolve, reject) => {
-                    if (button == generatedTab[1][0] && idCard.length == 1) {
-                      idCard.push(button);
-                      resolve(idCard);
-                      return console.log("nice");
-                    } else {
-                      reject("false");
-                    }
-                  });
-                  test2
-                    .then((result) => {
-                      console.log(result);
-                      card2.disabled = true;
-                      card2.classList.add("great");
-                      console.log(test2);
-                    })
-                    .catch((e) => {
-                      console.log(e);
-                    });
-                }
+        for (let i = 0; i < generatedTab.length; i++) {
+          if (idButton == i && idCard.length == i && generatedTab[i][0] === i) {
+            validCard(idCard, idButton, buttonClicked);
+            console.log(idCard);
+          } else {
+            notValidCard(buttonClicked);
+          }
+          
+        }
 
-                if(button == card3.id){
-              let test3 = new Promise((resolve, reject) => {
-                if (button == generatedTab[2][0] && idCard.length == 2) {
-                  idCard.push(button);
-                  resolve(idCard);
-                  return console.log("nice");
-                } else {
-                  reject("false");
-                }
-              });
-              test3
-                .then((result) => {
-                  console.log(result);
-                  card3.disabled = true;
-                  card3.classList.add("great");
-                  console.log(test3);
-                })
-                .catch((e) => {
-                  console.log(e);
-                });
-            }
+        if (idCard.length == generatedTab.length) {
+          restartGame(idCard, animals, animalPath);
+        }
+   
 
-                if(button == card4.id){
-              let test4 = new Promise((resolve, reject) => {
-                if (button == generatedTab[3][0] && idCard.length == 3) {
-                  idCard.push(button);
-                  resolve(idCard);
-                  return console.log("nice");
-                } else {
-                  reject("false");
-                }
-              });
-              test4
-                .then((result) => {
-                  console.log(result);
-                  card4.disabled = true;
-                  card4.classList.add("great");
-                  console.log(test4);
-                })
-                .catch((e) => {
-                  console.log(e);
-                });
-            }
 
-            if(button == card5.id){
-              let test5 = new Promise((resolve, reject) => {
-                if (button == generatedTab[4][0] && idCard.length == 4) {
-                  idCard.push(button);
-                  resolve(idCard);
-                  return console.log("nice");
-                } else {
-                  reject("false");
-                }
-              });
-              test5
-                .then((result) => {
-                  console.log(result);
-                  card5.disabled = true;
-                  card5.classList.add("great");
-                  console.log(test5);
-                })
-                .catch((e) => {
-                  console.log(e);
-                });
-            }
-            congrat(idCard, generatedTab);
+  if (idCard.length == generatedTab.length) {
+    restartGame(idCard, animals, animalPath);
+  }
+}
 
-           if(idCard.length == generatedTab.length){
-            restartGame(idCard, animals, animalPath);
-           }
 
+
+
+  function validCard(currentTab, idbutton, selectedButton){
+      currentTab.push(idbutton)
+      selectedButton.disabled = true;
+      selectedButton.classList.add('great')
+  }
+  function notValidCard(button){
+      button.classList.add("nope");
+
+      setTimeout(() => {
+        button.classList.remove("nope");
+      }, 500);
+  }
+
+  function stopCount(){
+    displayChrono.textContent
+  }
+  function countDown(n) {
+    displayChrono.innerHTML = n;
+    if (n === 0) {
+      cards.forEach((card) => {
+        card.disabled = true;
+      });
+      return;
     }
     
+    setTimeout(() => {
+      countDown(n - 1);
+    }, 1000);
+  
+  }
+    
 
-    
-    function restart(){
-        
-    }
-    
     function restartGame(reset, tab, path){
 
         BOARD.insertAdjacentHTML('beforeend', "<button id='restart'>Restart</button>");
@@ -351,8 +261,7 @@
         generateGame(restart, tab, path);
         generateGame(next, letters, letterPath);
         reset.length = 0;
-        generatedTab.length = 0;
-        mixedGeneratedTab.length = 0;
+        
 
     }
 
@@ -385,11 +294,9 @@
         let displayMixedTab = "";
         for (let i = 0; i < pics.length; i++) {
             displayMixedTab +=
-              "<button class='card' id=" +
+              "<button class='card' id='" +
               pics[i][0] +
-              " onClick='check(" +
-              pics[i][0] +
-              ")'><img class='scrollPic' src='pic/" +
+              "'><img class='scrollPic' src='pic/" +
               pics[i][1] +
               "' ></button>";
             BOARD.innerHTML = displayMixedTab;
