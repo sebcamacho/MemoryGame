@@ -1,6 +1,4 @@
-// window.onload = () => {
-
-//     let canvas = new Board('#board');
+// import { createElement } from "./functions/dom.js";
 
     const BOARD = document.querySelector("#board");
 
@@ -112,60 +110,67 @@
 
     mainMenu();
     function mainMenu(){
-      let game = "";
-      let practiceButton ="";
-      game = "<button id='game' disabled>Jeu</button>";
-      practiceButton ="<button id='practice'>Entrainement</button>";
-      BOARD.innerHTML = practiceButton + game;
+      let game;
+      let practiceButton;
+     
+      game = document.createElement('button')
+      game.setAttribute('id', 'game')
+      game.disabled = 'true'
+      game.append('Jeu')
 
-      gamebutton = document.getElementById("game");
-      practiceMode = document.getElementById("practice");
-      
-      practiceMode.addEventListener("click", function () {
+      practiceButton = document.createElement('button');
+      practiceButton.setAttribute("id", "practice");
+      practiceButton.append('Entrainement')
+
+      BOARD.append(practiceButton, game);
+      practiceButton.addEventListener("click", function () {
         startGame(animals, animalPath, 10);
-       
+        
+        this.remove()
+        game.remove()
       });
-      
-
     }
     
     
-    
+ 
+    let displayChrono = document.getElementById("chrono");
 
-    
+
     function startGame(tabItems, path){
+       idCard.length = 0;
       generatedTab.length = 0;
       mixedGeneratedTab.length = 0;
-    
+      displayChrono.innerHTML = "";
+      let testTab = []
       
-        for (let i = 0; i < 5; i++) {
-            generatedTab.push([i, generateItemPath(tabItems, path)]);
+      
+      for (let i = 0; i < 5; i++) {
+        testTab.push(generateItemPath(tabItems, path))
+      }
 
-              if(generatedTab[i][1] !== generatedTab[i][1]){
-                generatedTab.push([i, generateItemPath(tabItems, path)])
-              }
-            
-        }
+      cancelTwin(testTab, 5, animals, animalPath);
 
-        console.log(generatedTab);
-        let tabFromNewTab = randomValue(generatedTab);
-        for (let i = 0; i < 5; i++) {
+      for (let i = 0; i < 5; i++) {
+          generatedTab.push([i, testTab[i]]);
+      }
+
+      let tabFromNewTab = randomValue(generatedTab);
+      for (let i = 0; i < 5; i++) {
           mixedGeneratedTab.push(tabFromNewTab());
-        }
-        console.log(mixedGeneratedTab);
+      }
      
-    /**
-     * Display cards one by one before choice
-     */
-    for (let i = 0; i < generatedTab.length; i++) {
-      setTimeout(() => {
-        displayCard(generatedTab[i]);
-      }, i * 2000);
+      /**
+       * Display cards one by one before choice
+       */
+      for (let i = 0; i < generatedTab.length; i++) {
+        setTimeout(() => {
+          displayCard(generatedTab[i]);
+        }, i * 2000);
       
-    }
-    /**
-     * Display all Cards and add events on buttons
-     */
+      }
+      /**
+       * Display all Cards and add events on buttons
+       */
       setTimeout(() => {
         displayCards(mixedGeneratedTab);
         displayChrono.innerHTML = 10;
@@ -173,56 +178,43 @@
         cards.forEach((card) => {
           card.addEventListener("click", onButtonClick);
         });
+        setTimeout(() => {
+          countDown(10);
+          
+        }, 1000);
       }, 10000);
     }
-    let idCard = [];
+    
 
+let idCard = [];
 
-let displayChrono = document.getElementById("chrono");
 /**
  * 
  * @param {PointerEvent} button 
  */
 function onButtonClick(button) {
 
-  console.log(button.button)
-  
+
 let idButton = button.currentTarget.id;
 let buttonClicked = button.currentTarget
- 
-  if(displayChrono.textContent == 10){
-    countDown(10);
+
+
+  for (let i = 0; i < generatedTab.length; i++) {
+    if (idButton == i && idCard.length == i && generatedTab[i][0] === i) {
+      validCard(idCard, idButton, buttonClicked);
+    } else {
+      notValidCard(buttonClicked);
+    }
   }
-
-        for (let i = 0; i < generatedTab.length; i++) {
-          if (idButton == i && idCard.length == i && generatedTab[i][0] === i) {
-            validCard(idCard, idButton, buttonClicked);
-            console.log(idCard);
-          } else {
-            notValidCard(buttonClicked);
-          }
-          
-        }
-
-        if (idCard.length == generatedTab.length) {
-          restartGame(idCard, animals, animalPath);
-        }
-   
-
-
-  if (idCard.length == generatedTab.length) {
-    restartGame(idCard, animals, animalPath);
-  }
+  
 }
-
-
-
 
   function validCard(currentTab, idbutton, selectedButton){
       currentTab.push(idbutton)
       selectedButton.disabled = true;
       selectedButton.classList.add('great')
   }
+
   function notValidCard(button){
       button.classList.add("nope");
 
@@ -231,26 +223,24 @@ let buttonClicked = button.currentTarget
       }, 500);
   }
 
-  function stopCount(){
-    displayChrono.textContent
-  }
   function countDown(n) {
-    displayChrono.innerHTML = n;
-    if (n === 0) {
+    displayChrono.innerText = n;
+    if (n === 0 || idCard.length === 5) {
       cards.forEach((card) => {
         card.disabled = true;
       });
+      restartGame(animals, animalPath);
       return;
     }
     
     setTimeout(() => {
       countDown(n - 1);
     }, 1000);
-  
+    
   }
     
 
-    function restartGame(reset, tab, path){
+    function restartGame(tab, path){
 
         BOARD.insertAdjacentHTML('beforeend', "<button id='restart'>Restart</button>");
         BOARD.insertAdjacentHTML("beforeend", "<button id='next'>Alphabet</button>");
@@ -260,15 +250,13 @@ let buttonClicked = button.currentTarget
         
         generateGame(restart, tab, path);
         generateGame(next, letters, letterPath);
-        reset.length = 0;
-        
-
     }
 
     function generateGame(el, game, gamepath){
       el.addEventListener('click', function(){
         startGame(game, gamepath)
       })
+      
     }
 
     function congrat(tab1, tab2){
@@ -288,6 +276,7 @@ let buttonClicked = button.currentTarget
       displayHtml +=
         "<img class='scrollPic' src='pic/" + pic[1] + "' >";
       BOARD.innerHTML = displayHtml;
+      
     }
 
     function displayCards(pics) {
@@ -309,18 +298,54 @@ let buttonClicked = button.currentTarget
       let folder = "";
       let element = "";
       element = randomValue(item);
+      if (file){
       folder = randomValue(file);
-      text = "" + folder() + element() + "";
+      text = folder() + element();
       return text;
+      }else{
+        text =  element();
+        return text
+      }
      
     }
+
+    /**
+     * Before display pictures
+     * To verificate and return Array without twin item and right length
+     * @param {Array} tab 
+     * @param {Number} num 
+     * @param {String} item 
+     * @param {String} path 
+     * @returns {Array}
+     */
+    function cancelTwin(tab = Array, num = Number, item = String, path = String){
+      tab.sort()
+      for (let i = 0; i < num; i++) {
+        if(tab[i] === tab[i+1]){
+          tab.splice(i, 1)
+        }
+      }
+
+      if (tab.length < num){
+        let newItem = generateItemPath(item, path);
+        tab.push(newItem);
+        tab.sort();
+      }
+      
+      let dif = Boolean;
+      for (let i = 0; i < num; i++) {
+        if (tab[i] !== tab[i + 1]) {
+          dif == true
+        }else{
+          cancelTwin(tab, num, item, path)
+        }
+      }
+      if(dif == true){
+        
+        return tab;
+      }
+    }
    
-    function cardSelected(f){
-        idCard = [];
-        idCard.push(f)
-        console.log(idCard)
-    } 
-    
     function randomValue(tab) {
       let copy = tab.slice(0);
 
