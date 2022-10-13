@@ -1,4 +1,5 @@
 // import { createElement } from "./functions/dom.js";
+import { letterPath, letters, animalPath, animals } from "./items/items.js";
 
     const BOARD = document.querySelector("#board");
 
@@ -10,89 +11,6 @@
       [21, 22, 23, 24, 25],
     ];
 
-    
-
-    
-   
-    const letterPath = [
-      "Letters/Blue/",
-      "Letters/Box/",
-      "Letters/Brown/",
-      "Letters/Marble/",
-      "Letters/Metal/",
-      "Letters/Solid/",
-      "Letters/Wood/",
-      "Letters/Yellow/",
-    ];
- 
-    const letters = [
-      "letter_A.png",
-      "letter_B.png",
-      "letter_C.png",
-      "letter_D.png",
-      "letter_E.png",
-      "letter_F.png",
-      "letter_G.png",
-      "letter_H.png",
-      "letter_I.png",
-      "letter_J.png",
-      "letter_K.png",
-      "letter_L.png",
-      "letter_M.png",
-      "letter_N.png",
-      "letter_O.png",
-      "letter_P.png",
-      "letter_Q.png",
-      "letter_R.png",
-      "letter_S.png",
-      "letter_T.png",
-      "letter_U.png",
-      "letter_V.png",
-      "letter_W.png",
-      "letter_X.png",
-      "letter_Y.png",
-      "letter_Z.png",
-    ];
-
-    const animalPath = [
-      "Animals/Round/",
-      "Animals/Round-o/",
-      "Animals/Square/",
-      "Animals/Square-o/",
-    ];
-    const animals = [
-      "bear.png",
-      "buffalo.png",
-      "chick.png",
-      "chicken.png",
-      "cow.png",
-      "crocodile.png",
-      "dog.png",
-      "duck.png",
-      "elephant.png",
-      "frog.png",
-      "giraffe.png",
-      "goat.png",
-      "gorilla.png",
-      "hippo.png",
-      "horse.png",
-      "monkey.png",
-      "moose.png",
-      "narwhal.png",
-      "owl.png",
-      "panda.png",
-      "parrot.png",
-      "penguin.png",
-      "pig.png",
-      "rabbit.png",
-      "rhino.png",
-      "sloth.png",
-      "snake.png",
-      "walrus.png",
-      "whale.png",
-      "zebra.png",
-    ];
-
     let level1 = [
       {1 : [1, 2, 3, 4, 5]},
       {2 : [6, 7, 8, 9, 10]},
@@ -100,7 +18,11 @@
       {4 : [16, 17, 18, 19, 20]},
       {5 : [21, 22, 23, 24, 25]},
     ];
+    class Player{
+      
 
+
+    }
     
     
     let cards = document.querySelectorAll(".card");
@@ -192,7 +114,7 @@ let idCard = [];
  * 
  * @param {PointerEvent} button 
  */
-function onButtonClick(button) {
+async function onButtonClick(button) {
 
 
 let idButton = button.currentTarget.id;
@@ -201,26 +123,34 @@ let buttonClicked = button.currentTarget
 
   for (let i = 0; i < generatedTab.length; i++) {
     if (idButton == i && idCard.length == i && generatedTab[i][0] === i) {
-      validCard(idCard, idButton, buttonClicked);
-    } else {
-      notValidCard(buttonClicked);
-    }
+      await validCard(idCard, idButton, buttonClicked);
+    } 
   }
-  
-}
 
+  notValidCard(buttonClicked);
+}
+ 
   function validCard(currentTab, idbutton, selectedButton){
-      currentTab.push(idbutton)
+    console.log(validCard)
+    return new Promise(()=>{
+      selectedButton.classList.add("great");
       selectedButton.disabled = true;
-      selectedButton.classList.add('great')
+
+      currentTab.push(idbutton);
+    })
+   
+      
   }
 
   function notValidCard(button){
+    return new Promise(()=>{
+      console.log("nein");
       button.classList.add("nope");
-
       setTimeout(() => {
         button.classList.remove("nope");
-      }, 500);
+      }, 200);
+    })
+    
   }
 
   function countDown(n) {

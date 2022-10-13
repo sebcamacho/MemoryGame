@@ -1,9 +1,22 @@
+
+body{
+    margin: 0;
+    position: relative;
+}
+button#practice, button#game{
+    font-size: 20px;
+    padding: 30px;
+    background-color: burlywood;
+    border: solid 5px black;
+    border-radius: 10px;
+ 
+}
 .great{
-    background-color: aquamarine !important;
+    background-color: rgb(3, 119, 80) !important;
 }
 
 .nope{
-    background-color: darkred;
+    background-color: red !important;
 }
 
 body{
@@ -13,13 +26,17 @@ body{
     width: 50%;
     max-width: 260px;
     height: 260px;
+    border: dotted 10px #0ac3a7;
+    background-color: #fffdd8;
+    
 }
 
 #board{
+    background-color: lavender;
     height: 100%;
     display: flex;
     flex-wrap: wrap;
-    justify-content: center;
+    justify-content: space-evenly;
     align-items: center;
 }
 .scrollPic{
@@ -27,4 +44,8 @@ body{
     max-width: 100%;
     max-height: 100%;
     height: auto;
+}
+#chrono{
+    position: absolute;
+    
 }
