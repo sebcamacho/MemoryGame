@@ -1,9 +1,22 @@
+@font-face {
+    font-family: Silkscreen;
+    src: url(../Font/Silkscreen-Regular.ttf);
+}
+@font-face {
+    font-family: Silkscreen;
+    src: url(../Font/Silkscreen-Bold.ttf);
+    font-weight: bold;
+}
 
 body{
     margin: 0;
-    position: relative;
+    font-family: Silkscreen;
+    max-width: 1200px;
+    height: 100vh;
+    margin: auto;
 }
 button#practice, button#game{
+    font-family: Silkscreen;
     font-size: 20px;
     padding: 30px;
     background-color: burlywood;
@@ -19,24 +32,25 @@ button#practice, button#game{
     background-color: red !important;
 }
 
-body{
-    height: 100vh;
-}
 .card{
     width: 50%;
     max-width: 260px;
-    height: 260px;
+    height: auto;
     border: dotted 10px #0ac3a7;
+    border-radius: 10px;
     background-color: #fffdd8;
     
 }
 
 #board{
+    position: fixed;
     background-color: lavender;
-    height: 100%;
+    height: calc(100% - 30px);
+    max-width: 1200px;
+    width: 100%;
     display: flex;
     flex-wrap: wrap;
-    justify-content: space-evenly;
+    justify-content: space-around;
     align-items: center;
 }
 .scrollPic{
@@ -45,7 +59,25 @@ body{
     max-height: 100%;
     height: auto;
 }
+#header{
+    position: static;
+    height: 30px;
+    border: solid 3px #234b78;
+    border-radius: 5px;
+    display: flex !important;
+    align-items: center !important;
+    padding-left: 10px;
+    justify-content: space-around;
+   
+}
+#header>#time{
+    display: flex !important;
+    align-items: center !important;
+}
 #chrono{
-    position: absolute;
-    
+    font-size: 22px;
+    padding-left: 10px;
+}
+.fa-heart{
+    color: red;
 }

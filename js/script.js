@@ -1,5 +1,6 @@
 // import { createElement } from "./functions/dom.js";
 import { letterPath, letters, animalPath, animals } from "./items/items.js";
+import { Player } from "./Classes/Player.js";
 
     const BOARD = document.querySelector("#board");
 
@@ -18,23 +19,31 @@ import { letterPath, letters, animalPath, animals } from "./items/items.js";
       {4 : [16, 17, 18, 19, 20]},
       {5 : [21, 22, 23, 24, 25]},
     ];
-    class Player{
-      
 
-
-    }
     
+    const player = new Player
+    
+    console.log(player.lives)
     
     let cards = document.querySelectorAll(".card");
- 
+    let header = document.getElementById('header');
+    let displayChrono = document.getElementById("chrono");
+    let logoChrono = document.getElementById('logoChrono');
+    let lives = document.getElementById('lives')
+    let score = document.getElementById('score')
     let generatedTab = [];
     let mixedGeneratedTab = [];
-
+   
     mainMenu();
     function mainMenu(){
       let game;
       let practiceButton;
-     
+      header.style.display ="none"
+      player.getLives()
+      console.log(lives.children)
+      displayChrono.innerText = '--'
+      score.innerText +='0'
+
       game = document.createElement('button')
       game.setAttribute('id', 'game')
       game.disabled = 'true'
@@ -55,16 +64,16 @@ import { letterPath, letters, animalPath, animals } from "./items/items.js";
     
     
  
-    let displayChrono = document.getElementById("chrono");
+    
 
-
-    function startGame(tabItems, path){
+   
+    function startGame(tabItems, path, duration = 10){
+       header.style.display = "flex";
        idCard.length = 0;
       generatedTab.length = 0;
       mixedGeneratedTab.length = 0;
-      displayChrono.innerHTML = "";
+      displayChrono.innerText = "--";
       let testTab = []
-      
       
       for (let i = 0; i < 5; i++) {
         testTab.push(generateItemPath(tabItems, path))
@@ -101,7 +110,7 @@ import { letterPath, letters, animalPath, animals } from "./items/items.js";
           card.addEventListener("click", onButtonClick);
         });
         setTimeout(() => {
-          countDown(10);
+          countDown(duration);
           
         }, 1000);
       }, 10000);
@@ -131,7 +140,6 @@ let buttonClicked = button.currentTarget
 }
  
   function validCard(currentTab, idbutton, selectedButton){
-    console.log(validCard)
     return new Promise(()=>{
       selectedButton.classList.add("great");
       selectedButton.disabled = true;
@@ -139,13 +147,12 @@ let buttonClicked = button.currentTarget
       currentTab.push(idbutton);
     })
    
-      
   }
 
   function notValidCard(button){
     return new Promise(()=>{
-      console.log("nein");
       button.classList.add("nope");
+      player.mistake();
       setTimeout(() => {
         button.classList.remove("nope");
       }, 200);
@@ -155,11 +162,13 @@ let buttonClicked = button.currentTarget
 
   function countDown(n) {
     displayChrono.innerText = n;
-    if (n === 0 || idCard.length === 5) {
+    logoChrono.classList.add('fa-beat')
+    if (n === 0 || idCard.length === 5 || player.lives === 0) {
       cards.forEach((card) => {
         card.disabled = true;
       });
       restartGame(animals, animalPath);
+      logoChrono.classList.remove('fa-beat')
       return;
     }
     

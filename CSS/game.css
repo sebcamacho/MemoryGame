@@ -1,0 +1,124 @@
+/*! minireset.css v0.0.6 | MIT License | github.com/jgthms/minireset.css */
+html, body, p, ol, ul, li, dl, dt, dd, blockquote, figure, fieldset, legend, textarea, pre, iframe, hr, h1, h2, h3, h4, h5, h6 {
+  margin: 0;
+  padding: 0;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-size: 100%;
+  font-weight: normal;
+}
+
+ul {
+  list-style: none;
+}
+
+button, input, select {
+  margin: 0;
+}
+
+html {
+  box-sizing: border-box;
+}
+
+*, *::before, *::after {
+  box-sizing: inherit;
+}
+
+img, video {
+  height: auto;
+  max-width: 100%;
+}
+
+iframe {
+  border: 0;
+}
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+td, th {
+  padding: 0;
+}
+
+@font-face {
+  font-family: Silkscreen;
+  src: url(../Font/Silkscreen-Regular.ttf);
+}
+@font-face {
+  font-family: Silkscreen;
+  src: url(../Font/Silkscreen-Bold.ttf);
+  font-weight: bold;
+}
+body {
+  font-family: Silkscreen;
+  max-width: 1200px;
+  height: 100vh;
+  margin: auto;
+}
+
+#header {
+  position: static;
+  height: 30px;
+  border: solid 3px #234b78;
+  border-radius: 5px;
+  display: flex;
+  align-items: center !important;
+  padding-left: 10px;
+  justify-content: space-around;
+}
+#header #time {
+  display: flex !important;
+  align-items: center !important;
+}
+#header #chrono {
+  font-size: 22px;
+  padding-left: 10px;
+}
+#header .fa-heart {
+  color: red;
+}
+
+#board {
+  position: fixed;
+  background-color: lavender;
+  height: calc(100% - 30px);
+  max-width: 1200px;
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  align-items: center;
+}
+#board .scrollPic {
+  width: auto;
+  max-width: 100%;
+  max-height: 100%;
+  height: auto;
+}
+#board button#practice, #board button#game {
+  font-family: Silkscreen;
+  font-size: 20px;
+  padding: 30px;
+  background-color: burlywood;
+  border: solid 5px black;
+  border-radius: 10px;
+}
+#board .card {
+  width: 50%;
+  max-width: 260px;
+  height: auto;
+  border: dotted 10px #0ac3a7;
+  border-radius: 10px;
+  background-color: #fffdd8;
+}
+#board .great {
+  background-color: rgb(3, 119, 80) !important;
+}
+#board .nope {
+  background-color: red !important;
+}
+
+/*# sourceMappingURL=game.css.map */
