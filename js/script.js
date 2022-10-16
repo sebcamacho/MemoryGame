@@ -1,7 +1,7 @@
 // import { createElement } from "./functions/dom.js";
 import { letterPath, letters, animalPath, animals } from "./items/items.js";
 import { Player } from "./Classes/Player.js";
-
+import {openModal, closeModal} from './functions/modal.js'
     const BOARD = document.querySelector("#board");
 
     let levelx = [
@@ -29,8 +29,11 @@ import { Player } from "./Classes/Player.js";
     let header = document.getElementById('header');
     let displayChrono = document.getElementById("chrono");
     let logoChrono = document.getElementById('logoChrono');
-    let lives = document.getElementById('lives')
-    let score = document.getElementById('score')
+    let lives = document.getElementById('lives');
+    let score = document.getElementById('score');
+    let modalToChoose = document.querySelector('.modal');
+    let wrapper = document.querySelector('.modal-wrapper');
+    
     let generatedTab = [];
     let mixedGeneratedTab = [];
    
@@ -39,7 +42,6 @@ import { Player } from "./Classes/Player.js";
       let game;
       let practiceButton;
       header.style.display ="none"
-      player.getLives()
       console.log(lives.children)
       displayChrono.innerText = '--'
       score.innerText +='0'
@@ -68,13 +70,15 @@ import { Player } from "./Classes/Player.js";
 
    
     function startGame(tabItems, path, duration = 10){
+      
        header.style.display = "flex";
        idCard.length = 0;
       generatedTab.length = 0;
       mixedGeneratedTab.length = 0;
       displayChrono.innerText = "--";
       let testTab = []
-      
+      player.lives = 3
+      player.getLives();
       for (let i = 0; i < 5; i++) {
         testTab.push(generateItemPath(tabItems, path))
       }
@@ -103,6 +107,7 @@ import { Player } from "./Classes/Player.js";
        * Display all Cards and add events on buttons
        */
       setTimeout(() => {
+        
         displayCards(mixedGeneratedTab);
         displayChrono.innerHTML = 10;
         cards = document.querySelectorAll('.card');
@@ -110,7 +115,7 @@ import { Player } from "./Classes/Player.js";
           card.addEventListener("click", onButtonClick);
         });
         setTimeout(() => {
-          countDown(duration);
+          duringGame(duration);
           
         }, 1000);
       }, 10000);
@@ -160,29 +165,41 @@ let buttonClicked = button.currentTarget
     
   }
 
-  function countDown(n) {
+  function duringGame(n) {
     displayChrono.innerText = n;
     logoChrono.classList.add('fa-beat')
-    if (n === 0 || idCard.length === 5 || player.lives === 0) {
+    if (n === 0 || player.lives === 0) {
       cards.forEach((card) => {
         card.disabled = true;
+        card.removeEventListener("click", onButtonClick);
       });
+      openModal(modalToChoose);
       restartGame(animals, animalPath);
+      loose();
       logoChrono.classList.remove('fa-beat')
+      
       return;
+    }
+
+    if (idCard.length === 5) {
+      openModal(modalToChoose);
+      restartGame(animals, animalPath);
+      logoChrono.classList.remove("fa-beat");
+      win();
+      return
     }
     
     setTimeout(() => {
-      countDown(n - 1);
+      duringGame(n - 1);
     }, 1000);
     
   }
     
 
     function restartGame(tab, path){
-
-        BOARD.insertAdjacentHTML('beforeend', "<button id='restart'>Restart</button>");
-        BOARD.insertAdjacentHTML("beforeend", "<button id='next'>Alphabet</button>");
+        wrapper.insertAdjacentHTML('afterbegin', '<p class="message"></p>')
+        wrapper.insertAdjacentHTML('beforeend', "<button id='restart'>Restart</button>");
+        wrapper.insertAdjacentHTML("beforeend", "<button id='next'>Alphabet</button>");
 
         let restart = document.getElementById('restart');
         let next = document.getElementById("next");
@@ -192,10 +209,30 @@ let buttonClicked = button.currentTarget
     }
 
     function generateGame(el, game, gamepath){
+      
       el.addEventListener('click', function(){
         startGame(game, gamepath)
+        closeModal(modalToChoose);
+        wrapper.innerHTML = "";
+      
       })
       
+    }
+    
+    function win () {
+      
+      let msg = document.querySelector(".message");
+      msg.innerText = 'Gagné !'
+      msg.style.color = "#0ac3a7";
+      wrapper.style.borderColor = "#0ac3a7";
+      // insertAdjacentText("afterbegin", `Gagné ! score \n`);
+    }
+
+    function loose () {
+      let msg = document.querySelector(".message");
+      msg.innerText = "PERDU";
+      msg.style.color = "#d83a37";
+      wrapper.style.borderColor = "#d83a37";
     }
 
     function congrat(tab1, tab2){

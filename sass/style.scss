@@ -1,0 +1,154 @@
+@import "libs/reset.scss";
+@font-face {
+  font-family: Silkscreen;
+  src: url(../Font/Silkscreen-Regular.ttf);
+}
+@font-face {
+  font-family: Silkscreen;
+  src: url(../Font/Silkscreen-Bold.ttf);
+  font-weight: bold;
+}
+$win : #0ac3a7;
+$loose : #d83a37;
+body {
+  font-family: Silkscreen;
+  max-width: 1200px;
+  height: 100vh;
+  margin: auto;
+}
+#header {
+  position: fixed;
+  width: 100vw;
+  background-color: #fff;
+  height: 30px;
+  border: solid 3px #234b78;
+  border-radius: 5px;
+  display: flex;
+  align-items: center !important;
+  padding-left: 10px;
+  justify-content: space-around;
+  #time {
+    display: flex !important;
+    align-items: center !important;
+  }
+  #chrono {
+    font-size: 22px;
+    padding-left: 10px;
+  }
+  .fa-heart {
+    color: red;
+  }
+}
+.btn{
+    font-family: Silkscreen;
+   
+    font-size: 15px;
+    padding: 20px;
+    margin: 3px;
+    background-color: burlywood;
+    border: solid 5px black;
+    border-radius: 10px;
+}
+#board {
+  position: static;
+  background-color: lavender;
+  height: 100vh;
+  max-width: 1200px;
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  .scrollPic {
+    width: auto;
+    max-width: 100%;
+    max-height: 100%;
+    height: auto;
+  }
+  button#practice,
+  button#game {
+    @extend .btn
+  }
+  .card {
+    width: 47%;
+    max-width: 260px;
+    height: auto;
+    border: dotted 5px #0ac3a7;
+    border-radius: 10px;
+    background-color: #fffdd8;
+    margin: 4px;
+  }
+  .great {
+    background-color: rgb(3, 119, 80) !important;
+  }
+
+  .nope {
+    background-color: red !important;
+  }
+
+  
+}
+
+.modal{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0, 0.6);
+    animation: fadeIn .3s both;
+    .modal-wrapper{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        overflow: auto;
+        border: solid 5px #d83a37;
+        background-color: #fffdd8;
+        width: 600px;
+        max-width: calc(100vw - 80px);
+        max-height: calc(100vh - 100px);
+        height: 80vh;
+        border-radius: 5px;
+        animation: slideFromTop .5s both;
+      
+    }
+    #restart, #next{
+        
+        @extend .btn;
+        width : 150px;
+    }
+    .message{
+        margin-bottom: 100px;
+        font-size: 25px;
+    }
+  }
+
+  .modal[aria-hidden="true"]{
+    animation-name: fadeOut;
+    .modal-wrapper{
+        animation-name: slideFromBottom;
+    }
+  }
+
+  @keyframes fadeIn{
+    from {opacity: 0;}
+    to {opacity: 1;}
+  }
+  @keyframes fadeOut{
+    from {opacity: 1;}
+    to {opacity: 0;}
+  }
+
+  @keyframes slideFromTop{
+    from {transform: translateY(-50px)}
+    to {transform: translateY(0px)}
+  }
+
+  @keyframes slideFromBottom{
+    from {transform: translateY(0px)}
+    to {transform: translateY(50px)}
+  }
