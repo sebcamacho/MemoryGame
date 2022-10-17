@@ -18,12 +18,13 @@ body {
 }
 #header {
   position: fixed;
+  max-width: 1200px;
   width: 100vw;
   background-color: #fff;
   height: 30px;
   border: solid 3px #234b78;
   border-radius: 5px;
-  display: flex;
+  display: none;
   align-items: center !important;
   padding-left: 10px;
   justify-content: space-around;
@@ -106,7 +107,7 @@ body {
         align-items: center;
         justify-content: center;
         overflow: auto;
-        border: solid 5px #d83a37;
+        border: inset 5px #d83a37;
         background-color: #fffdd8;
         width: 600px;
         max-width: calc(100vw - 80px);
@@ -120,10 +121,13 @@ body {
         
         @extend .btn;
         width : 150px;
+        
+       
     }
     .message{
         margin-bottom: 100px;
         font-size: 25px;
+        text-align: center;
     }
   }
 

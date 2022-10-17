@@ -1,15 +1,8 @@
-/**
- * 
- * @param {string} tagName 
- * @param {object} attributes 
- * @return {HTMLElement}
- */
-export function createElement(tagName, attributes = {}) {
-    const element = document.createElement(tagName)
-    for (const [attribute, value] of Object.entries(attributes)) {
-        if (value !== null) {
-            element.setAttribute(attribute, value)
-        }
-    }
-    return element
-}
+export let cards = document.querySelectorAll(".card");
+export let header = document.getElementById("header");
+export let displayChrono = document.getElementById("chrono");
+export let logoChrono = document.getElementById("logoChrono");
+export let lives = document.getElementById("lives");
+export let score = document.getElementById("score");
+export let modalToChoose = document.querySelector(".modal");
+export let wrapper = document.querySelector(".modal-wrapper");

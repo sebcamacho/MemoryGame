@@ -1,7 +1,9 @@
-// import { createElement } from "./functions/dom.js";
+
 import { letterPath, letters, animalPath, animals } from "./items/items.js";
 import { Player } from "./Classes/Player.js";
-import {openModal, closeModal} from './functions/modal.js'
+import {openModal, closeModal} from './functions/modal.js';
+import {generateItemPath, cancelTwin, randomValue} from './functions/fnToGenerateCard.js';
+import {cards, header, displayChrono, lives, logoChrono, modalToChoose, wrapper} from './functions/dom.js'
     const BOARD = document.querySelector("#board");
 
     let levelx = [
@@ -20,20 +22,8 @@ import {openModal, closeModal} from './functions/modal.js'
       {5 : [21, 22, 23, 24, 25]},
     ];
 
-    
     const player = new Player
-    
-    console.log(player.lives)
-    
-    let cards = document.querySelectorAll(".card");
-    let header = document.getElementById('header');
-    let displayChrono = document.getElementById("chrono");
-    let logoChrono = document.getElementById('logoChrono');
-    let lives = document.getElementById('lives');
-    let score = document.getElementById('score');
-    let modalToChoose = document.querySelector('.modal');
-    let wrapper = document.querySelector('.modal-wrapper');
-    
+        
     let generatedTab = [];
     let mixedGeneratedTab = [];
    
@@ -41,8 +31,6 @@ import {openModal, closeModal} from './functions/modal.js'
     function mainMenu(){
       let game;
       let practiceButton;
-      header.style.display ="none"
-      console.log(lives.children)
       displayChrono.innerText = '--'
       score.innerText +='0'
 
@@ -56,41 +44,48 @@ import {openModal, closeModal} from './functions/modal.js'
       practiceButton.append('Entrainement')
 
       BOARD.append(practiceButton, game);
+
       practiceButton.addEventListener("click", function () {
-        startGame(animals, animalPath, 10);
-        
+        startGame(animals, animalPath, 3, 5);
         this.remove()
         game.remove()
       });
     }
     
-    
- 
-    
-
-   
-    function startGame(tabItems, path, duration = 10){
+   /**
+    * 
+    * @param {Array} tabItems 
+    * @param {Array} path 
+    * @param {Number} duration 
+    * @param {Number} length
+    * @param {Boolean} reset 
+    */
+    function startGame(tabItems, path, duration = 10, length = 5){
       
-       header.style.display = "flex";
-       idCard.length = 0;
+      header.style.display = "flex";
+      idCard.length = 0;
       generatedTab.length = 0;
       mixedGeneratedTab.length = 0;
       displayChrono.innerText = "--";
       let testTab = []
+      if(player.lives === 0){
       player.lives = 3
+      }
       player.getLives();
-      for (let i = 0; i < 5; i++) {
+
+
+      for (let i = 0; i < length; i++) {
         testTab.push(generateItemPath(tabItems, path))
       }
 
-      cancelTwin(testTab, 5, animals, animalPath);
+      cancelTwin(testTab, testTab.length, animals, animalPath);
 
-      for (let i = 0; i < 5; i++) {
+      for (let i = 0; i < testTab.length; i++) {
           generatedTab.push([i, testTab[i]]);
       }
 
       let tabFromNewTab = randomValue(generatedTab);
-      for (let i = 0; i < 5; i++) {
+      for (let i = 0; i < generatedTab.length; i++) {
           mixedGeneratedTab.push(tabFromNewTab());
       }
      
@@ -109,8 +104,8 @@ import {openModal, closeModal} from './functions/modal.js'
       setTimeout(() => {
         
         displayCards(mixedGeneratedTab);
-        displayChrono.innerHTML = 10;
-        cards = document.querySelectorAll('.card');
+        displayChrono.innerHTML = duration;
+        let cards = document.querySelectorAll('.card');
         cards.forEach((card) => {
           card.addEventListener("click", onButtonClick);
         });
@@ -118,7 +113,7 @@ import {openModal, closeModal} from './functions/modal.js'
           duringGame(duration);
           
         }, 1000);
-      }, 10000);
+      }, length * 2000);
     }
     
 
@@ -144,56 +139,66 @@ let buttonClicked = button.currentTarget
   notValidCard(buttonClicked);
 }
  
-  function validCard(currentTab, idbutton, selectedButton){
-    return new Promise(()=>{
+  
+function validCard(currentTab, idbutton, selectedButton){
+  return new Promise(()=>{
       selectedButton.classList.add("great");
       selectedButton.disabled = true;
-
       currentTab.push(idbutton);
     })
-   
   }
 
-  function notValidCard(button){
-    return new Promise(()=>{
-      button.classList.add("nope");
-      player.mistake();
-      setTimeout(() => {
-        button.classList.remove("nope");
-      }, 200);
-    })
+function notValidCard(button){
+  return new Promise(()=>{
+    button.classList.add("nope");
+    player.mistake();
+    setTimeout(() => {
+      button.classList.remove("nope");
+    }, 200);
+  })
     
+}
+
+function duringGame(n) {
+  displayChrono.innerText = n;
+  logoChrono.classList.add('fa-beat')
+  if (n === 0 ) {
+    cards.forEach((card) => {
+      card.disabled = true;
+      card.removeEventListener("click", onButtonClick);
+    });
+    openModal(modalToChoose);
+    restartGame(animals, animalPath);
+    lose(`PERDU
+
+    Temps écoulé`);
+    logoChrono.classList.remove('fa-beat')
+      
+    return;
   }
 
-  function duringGame(n) {
-    displayChrono.innerText = n;
-    logoChrono.classList.add('fa-beat')
-    if (n === 0 || player.lives === 0) {
-      cards.forEach((card) => {
-        card.disabled = true;
-        card.removeEventListener("click", onButtonClick);
-      });
-      openModal(modalToChoose);
-      restartGame(animals, animalPath);
-      loose();
-      logoChrono.classList.remove('fa-beat')
-      
-      return;
-    }
+  if (player.lives === 0){
+    openModal(modalToChoose);
+    restartGame(animals, animalPath);
+    lose(`Perdu
+    Fin de la partie`);
+    logoChrono.classList.remove("fa-beat");
 
-    if (idCard.length === 5) {
+    return;
+  }
+    if (idCard.length === generatedTab.length) {
       openModal(modalToChoose);
       restartGame(animals, animalPath);
       logoChrono.classList.remove("fa-beat");
       win();
-      return
+      return;
     }
     
-    setTimeout(() => {
-      duringGame(n - 1);
-    }, 1000);
+  setTimeout(() => {
+    duringGame(n - 1);
+  }, 1000);
     
-  }
+}
     
 
     function restartGame(tab, path){
@@ -222,30 +227,18 @@ let buttonClicked = button.currentTarget
     function win () {
       
       let msg = document.querySelector(".message");
-      msg.innerText = 'Gagné !'
+      msg.innerText = 'Gagné ! \r score : \r'
       msg.style.color = "#0ac3a7";
       wrapper.style.borderColor = "#0ac3a7";
       // insertAdjacentText("afterbegin", `Gagné ! score \n`);
     }
 
-    function loose () {
+    function lose (txt) {
       let msg = document.querySelector(".message");
-      msg.innerText = "PERDU";
+      msg.innerText = txt;
       msg.style.color = "#d83a37";
       wrapper.style.borderColor = "#d83a37";
-    }
-
-    function congrat(tab1, tab2){
-        
-        if (tab1.length == tab2.length){
-            console.log('You win !')
-            
-        }else{
-            console.log('waiting')
-        
-        }
-    }
-    
+    } 
 
     function displayCard(pic) {
       let displayHtml = "";
@@ -269,71 +262,5 @@ let buttonClicked = button.currentTarget
         }
     }
 
-    function generateItemPath(item, file) {
-      let text = "";
-      let folder = "";
-      let element = "";
-      element = randomValue(item);
-      if (file){
-      folder = randomValue(file);
-      text = folder() + element();
-      return text;
-      }else{
-        text =  element();
-        return text
-      }
-     
-    }
-
-    /**
-     * Before display pictures
-     * To verificate and return Array without twin item and right length
-     * @param {Array} tab 
-     * @param {Number} num 
-     * @param {String} item 
-     * @param {String} path 
-     * @returns {Array}
-     */
-    function cancelTwin(tab = Array, num = Number, item = String, path = String){
-      tab.sort()
-      for (let i = 0; i < num; i++) {
-        if(tab[i] === tab[i+1]){
-          tab.splice(i, 1)
-        }
-      }
-
-      if (tab.length < num){
-        let newItem = generateItemPath(item, path);
-        tab.push(newItem);
-        tab.sort();
-      }
-      
-      let dif = Boolean;
-      for (let i = 0; i < num; i++) {
-        if (tab[i] !== tab[i + 1]) {
-          dif == true
-        }else{
-          cancelTwin(tab, num, item, path)
-        }
-      }
-      if(dif == true){
-        
-        return tab;
-      }
-    }
-   
-    function randomValue(tab) {
-      let copy = tab.slice(0);
-
-      return function () {
-        if (copy.length < 1) {
-          copy = tab.slice(0);
-        }
-        let index = Math.floor(Math.random() * copy.length);
-        let element = copy[index];
-        copy.splice(index, 1);
-        return element;
-      };
-    }
     
 
