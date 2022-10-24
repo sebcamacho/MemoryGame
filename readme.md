@@ -1,6 +1,6 @@
 # Memory Game   <img src="./pic/brain.png" width="30px" height="30px">
 
-Memory game is my JavaScript project to improve my skills with Javascript.
+Memory game is my JavaScript project to improve my skills with Javascript <span style="color: red">without dedicated tutorial</span>. 
 
 ## Rules
  
@@ -40,7 +40,7 @@ Test it on this [website](https://memory-game.sebastiencamacho.fr).
             ├──buffalo.png
             ├──...
 ```
-<p>I adapted my code to the folder structure, but it's <b>maybe</b> not the rigth way. Rather than generate one path to display a picture, I have to generate two random elements to access the picture : <b>the folder path</b> and <b>the name of picture</b>. Therefor i created const Array for each item like: </p>
+I adapted my code to the folder structure, but it's <b style="color:blue">maybe</b> not the rigth way. Rather than generate one path to display a picture, I have to generate two random elements to access the picture : <b style="color:blue">the folder path</b> and <b style="color:blue">the name of picture</b>. Therefor i created const Array to put the elements in : 
 
 ```
 const animalPath = [                const animals = [
@@ -50,7 +50,7 @@ const animalPath = [                const animals = [
   "Animals/Square-o/",              ...
 ];                                  ];
 ```
-<p>Then each line of random array is generated one by one by calling randomValue() function in boucle for </p>
+Then each line of random array is generated one by one by calling randomValue() function in boucle for and pushed in the first array
 
 ```
 export function randomValue(tab) {
@@ -67,4 +67,3 @@ export function randomValue(tab) {
   };
 }
 ```
-<p> Once again, it's <b>maybe</b> not the good way</p>
