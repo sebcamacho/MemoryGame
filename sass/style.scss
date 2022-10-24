@@ -51,6 +51,7 @@ body {
     border-radius: 10px;
 }
 #board {
+
   position: static;
   background-color: lavender;
   height: 100vh;
@@ -60,24 +61,46 @@ body {
   flex-wrap: wrap;
   justify-content: center;
   align-items: center;
+  .bgCard {
+    background-color: #234b78;
+    width: 300px;
+    height: 300px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: solid 20px rgb(167, 35, 23);
+    border-radius: 10px;
+    box-shadow: 2px 2px 8px 1px rgba(0,0,0,0.75);
+-webkit-box-shadow: 2px 2px 8px 1px rgba(0,0,0,0.75);
+-moz-box-shadow: 2px 2px 8px 1px rgba(0,0,0,0.75);
+  }
   .scrollPic {
+    
     width: auto;
-    max-width: 100%;
-    max-height: 100%;
+    max-width: 80%;
+    max-height: 80%;
     height: auto;
+    
   }
   button#practice,
   button#game {
     @extend .btn
   }
   .card {
-    width: 47%;
+    width: 49%;
     max-width: 260px;
-    height: auto;
-    border: dotted 5px #0ac3a7;
+    height: 25%;
+    max-height: 260px;
+    border: solid 8px rgb(167, 35, 23);
     border-radius: 10px;
-    background-color: #fffdd8;
-    margin: 4px;
+    background-color: #234b78;
+    margin: .5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 2px 2px 8px 1px rgba(0,0,0,0.75);
+-webkit-box-shadow: 2px 2px 8px 1px rgba(0,0,0,0.75);
+-moz-box-shadow: 2px 2px 8px 1px rgba(0,0,0,0.75);
   }
   .great {
     background-color: rgb(3, 119, 80) !important;
@@ -110,24 +133,34 @@ body {
         border: inset 5px #d83a37;
         background-color: #fffdd8;
         width: 600px;
-        max-width: calc(100vw - 80px);
+        max-width: calc(100vw - 60px);
         max-height: calc(100vh - 100px);
         height: 80vh;
         border-radius: 5px;
         animation: slideFromTop .5s both;
       
     }
-    #restart, #next{
+    .showButtons{
+      width: 100%;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: center;
+    }
+    button{
+        text-align: center;
         
         @extend .btn;
-        width : 150px;
+        width : 130px;
         
        
     }
     .message{
-        margin-bottom: 100px;
+      
+        margin-bottom: 30px;
         font-size: 25px;
         text-align: center;
+        transition: .5;
     }
   }
 

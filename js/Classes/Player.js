@@ -1,3 +1,5 @@
+// import { score } from "../functions/dom";
+
 export class Player {
   lives = 3;
   score = 0;
@@ -7,6 +9,17 @@ export class Player {
 
   setScore(v) {
     this.score += v;
+  }
+  init(){
+    this.score = 0
+    this.getScore();
+    this.lives = 3
+    this.getLives();
+  }
+
+  getScore() {
+    score.innerHTML = `score: ${this.score}`;
+
   }
 
   mistake() {

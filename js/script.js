@@ -1,9 +1,9 @@
 
-import { letterPath, letters, animalPath, animals } from "./items/items.js";
+import * as items from "./items/items.js";
 import { Player } from "./Classes/Player.js";
 import {openModal, closeModal} from './functions/modal.js';
 import {generateItemPath, cancelTwin, randomValue} from './functions/fnToGenerateCard.js';
-import {cards, header, displayChrono, lives, logoChrono, modalToChoose, wrapper} from './functions/dom.js'
+import {cards, header, displayChrono, lives, logoChrono, modalToChoose, wrapper, score, showButtons, messageWrapper} from './functions/dom.js'
     const BOARD = document.querySelector("#board");
 
     let levelx = [
@@ -46,11 +46,19 @@ import {cards, header, displayChrono, lives, logoChrono, modalToChoose, wrapper}
       BOARD.append(practiceButton, game);
 
       practiceButton.addEventListener("click", function () {
-        startGame(animals, animalPath, 3, 5);
+        startGame(items.animals, items.animalPath, 10, 5);
         this.remove()
         game.remove()
       });
     }
+
+    let GameParams = {
+      tabItems : "",
+      path : "",
+      duration : 10,
+      numberOfCards : 5,
+      displayOneCardDelay : 2000
+    };
     
    /**
     * 
@@ -60,7 +68,7 @@ import {cards, header, displayChrono, lives, logoChrono, modalToChoose, wrapper}
     * @param {Number} length
     * @param {Boolean} reset 
     */
-    function startGame(tabItems, path, duration = 10, length = 5){
+    function startGame(tabItems, path, duration = 10, numberOfCards = 5, displayOneCardTime = 2000){
       
       header.style.display = "flex";
       idCard.length = 0;
@@ -69,16 +77,17 @@ import {cards, header, displayChrono, lives, logoChrono, modalToChoose, wrapper}
       displayChrono.innerText = "--";
       let testTab = []
       if(player.lives === 0){
-      player.lives = 3
+      
+      player.init();
       }
       player.getLives();
+      BOARD.style.paddingTop = "30px";
 
-
-      for (let i = 0; i < length; i++) {
+      for (let i = 0; i < numberOfCards; i++) {
         testTab.push(generateItemPath(tabItems, path))
       }
 
-      cancelTwin(testTab, testTab.length, animals, animalPath);
+      cancelTwin(testTab, testTab.length, tabItems, path);
 
       for (let i = 0; i < testTab.length; i++) {
           generatedTab.push([i, testTab[i]]);
@@ -95,7 +104,7 @@ import {cards, header, displayChrono, lives, logoChrono, modalToChoose, wrapper}
       for (let i = 0; i < generatedTab.length; i++) {
         setTimeout(() => {
           displayCard(generatedTab[i]);
-        }, i * 2000);
+        }, i * displayOneCardTime);
       
       }
       /**
@@ -113,7 +122,7 @@ import {cards, header, displayChrono, lives, logoChrono, modalToChoose, wrapper}
           duringGame(duration);
           
         }, 1000);
-      }, length * 2000);
+      }, numberOfCards * displayOneCardTime);
     }
     
 
@@ -159,7 +168,9 @@ function notValidCard(button){
     
 }
 
+
 function duringGame(n) {
+  
   displayChrono.innerText = n;
   logoChrono.classList.add('fa-beat')
   if (n === 0 ) {
@@ -168,18 +179,18 @@ function duringGame(n) {
       card.removeEventListener("click", onButtonClick);
     });
     openModal(modalToChoose);
-    restartGame(animals, animalPath);
+    restartGame();
     lose(`PERDU
 
     Temps écoulé`);
     logoChrono.classList.remove('fa-beat')
-      
+    player.mistake();
     return;
   }
 
   if (player.lives === 0){
     openModal(modalToChoose);
-    restartGame(animals, animalPath);
+    restartGame();
     lose(`Perdu
     Fin de la partie`);
     logoChrono.classList.remove("fa-beat");
@@ -188,29 +199,39 @@ function duringGame(n) {
   }
     if (idCard.length === generatedTab.length) {
       openModal(modalToChoose);
-      restartGame(animals, animalPath);
+      restartGame();
       logoChrono.classList.remove("fa-beat");
       win();
       return;
     }
-    
+  
   setTimeout(() => {
     duringGame(n - 1);
+   
   }, 1000);
     
 }
-    
 
-    function restartGame(tab, path){
-        wrapper.insertAdjacentHTML('afterbegin', '<p class="message"></p>')
-        wrapper.insertAdjacentHTML('beforeend', "<button id='restart'>Restart</button>");
-        wrapper.insertAdjacentHTML("beforeend", "<button id='next'>Alphabet</button>");
+    function restartGame(){
+        messageWrapper.insertAdjacentHTML('afterbegin', '<p class="message"></p>')
+        showButtons.insertAdjacentHTML('beforeend', "<button id='animaux'>Animaux</button>");
+        showButtons.insertAdjacentHTML("beforeend", "<button id='letter'>Alphabet</button>");
+        showButtons.insertAdjacentHTML("beforeend","<button id='runes'>Runes</button>");
+        showButtons.insertAdjacentHTML("beforeend", "<button id='taches'>Tâches</button>" );
+        showButtons.insertAdjacentHTML("beforeend","<button id='fume'>Fumée</button>");
 
-        let restart = document.getElementById('restart');
-        let next = document.getElementById("next");
+        let animaux = document.getElementById('animaux');
+        let letter = document.getElementById("letter");
+        let runes = document.getElementById("runes");
+        let taches = document.getElementById("taches");
+        let fume = document.getElementById("fume");
+       
         
-        generateGame(restart, tab, path);
-        generateGame(next, letters, letterPath);
+        generateGame(animaux, items.animals, items.animalPath);
+        generateGame(letter, items.letters, items.letterPath);
+        generateGame(runes, items.runes, items.runePath);
+        generateGame(taches, items.splats, items.pathSplat);
+        generateGame(fume, items.smokes, items.pathSmoke);
     }
 
     function generateGame(el, game, gamepath){
@@ -218,7 +239,8 @@ function duringGame(n) {
       el.addEventListener('click', function(){
         startGame(game, gamepath)
         closeModal(modalToChoose);
-        wrapper.innerHTML = "";
+        messageWrapper.innerHTML = "";
+        showButtons.innerHTML = "";
       
       })
       
@@ -227,10 +249,17 @@ function duringGame(n) {
     function win () {
       
       let msg = document.querySelector(".message");
-      msg.innerText = 'Gagné ! \r score : \r'
+      
       msg.style.color = "#0ac3a7";
       wrapper.style.borderColor = "#0ac3a7";
-      // insertAdjacentText("afterbegin", `Gagné ! score \n`);
+      player.setScore(1135 * displayChrono.textContent)
+      player.getScore()
+      msg.innerText = "Gagné ! \r\r" ;
+     
+      setTimeout(()=>{
+        msg.innerText += score.textContent;
+      }, 500)
+      
     }
 
     function lose (txt) {
@@ -243,7 +272,8 @@ function duringGame(n) {
     function displayCard(pic) {
       let displayHtml = "";
       displayHtml +=
-        "<img class='scrollPic' src='pic/" + pic[1] + "' >";
+        "<div class='bgCard'><img class='scrollPic' src='pic/" + pic[1] + "' ></div>";
+        
       BOARD.innerHTML = displayHtml;
       
     }

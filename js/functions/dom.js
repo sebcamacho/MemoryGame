@@ -6,3 +6,5 @@ export let lives = document.getElementById("lives");
 export let score = document.getElementById("score");
 export let modalToChoose = document.querySelector(".modal");
 export let wrapper = document.querySelector(".modal-wrapper");
+export let messageWrapper = document.querySelector('.sectionMsg')
+export let showButtons = document.querySelector('.showButtons')
